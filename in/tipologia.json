@@ -1,0 +1,83 @@
+{
+  "prerequisites": {
+    "keywords": [
+      "Prerequisites",
+      "Requirements",
+      "Dependencies",
+      "Getting Started"
+    ]
+  },
+  "title": {
+    "keywords": [
+      "Title",
+      "Name of Project",
+      "Index",
+      "Table of contents",
+      "Overview",
+      "Introduction",
+      "About",
+      "Description",
+      "Purpose",
+      "Summary"
+    ]
+  },
+  "install": {
+    "keywords": [
+      "Install",
+      "Installation",
+      "Installing",
+      "Build",
+      "Building",
+      "Setup",
+      "Deployment",
+      "Source",
+      "Download",
+      "Binary",
+      "Executable"
+    ]
+  },
+  "configuration": {
+    "keywords": [
+      "Config",
+      "Settings",
+      "Options",
+      "Flags",
+      "Parameters",
+      "Environment variables",
+      "Editable values",
+      "Custom",
+      "Paths",
+      "Storing",
+      "Proxies",
+      "Customization"
+    ]
+  },
+  "documentation": {
+    "keywords": [
+      "Docs",
+      "Guide",
+      "Manual",
+      "Wiki",
+      "Manpage",
+      "Api",
+      "Details",
+      "FAQ",
+      "Tutorial"
+    ]
+  },
+  "features": {
+    "keywords": [
+      "Features",
+      "Functionality",
+      "Capabilities",
+      "Key Features",
+      "Building blocks",
+      "Characteristics",
+      "Attributes",
+      "Highlights",
+      "Cool Stuff",
+      "Syntax",
+      "Goals"
+    ]
+  }
+}
