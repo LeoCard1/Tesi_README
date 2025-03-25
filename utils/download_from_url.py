@@ -1,3 +1,4 @@
+import os
 import urllib.request
 
 
@@ -22,8 +23,23 @@ def rename_urls(site_list):
         s_raw.append(c)
     return s_raw
 
+def pulisci_cartella(cartella):
+    """Elimina solo i file .md presenti nella cartella, senza rimuovere la cartella stessa."""
+    if os.path.exists(cartella):
+        for file in os.listdir(cartella):
+            file_path = os.path.join(cartella, file)
+            try:
+                if os.path.isfile(file_path) and file.endswith(".md"):
+                    os.remove(file_path)
+            except Exception as e:
+                print(f"Errore nell'eliminazione di {file}: {e}")
+    else:
+        os.makedirs(cartella)  # Se la cartella non esiste, la crea
 
-# Funzione per scaricare i file Markdown da una lista di link e salvarli localmente
+
+
+
+# Funzione per leggere il contenuto di un file Markdown
 def download_md_file(link_list, path_md_file):
     """
     Questa funzione scarica i file README.md dai link forniti e li salva localmente.
@@ -35,6 +51,7 @@ def download_md_file(link_list, path_md_file):
     Ritorna:
     - i (int): Numero di file scaricati con successo.
     """
+    pulisci_cartella(path_md_file)
     i = 0  # Contatore per i file scaricati
     for link in link_list:
         try:
@@ -44,25 +61,3 @@ def download_md_file(link_list, path_md_file):
         except:
             pass  # Ignora eventuali errori durante il download e continua con il prossimo link
     return i
-
-
-# Funzione per leggere il contenuto di un file Markdown
-def download_md_text(md_file):
-    """
-    Questa funzione legge il contenuto di un file Markdown e lo restituisce come stringa.
-
-    Parametri:
-    - md_file (str): Percorso del file Markdown da leggere.
-
-    Ritorna:
-    - md_text (str): Contenuto del file Markdown, oppure stringa vuota se il file non esiste
-                     o se si verifica un errore di decodifica.
-    """
-    try:
-        with open(md_file, 'r', encoding='utf-8') as file:
-            md_text = file.read()
-    except FileNotFoundError:
-        md_text = ""  # Se il file non esiste, restituisce una stringa vuota
-    except UnicodeDecodeError:
-        md_text = ""  # Se c'è un errore di decodifica, restituisce una stringa vuota
-    return md_text

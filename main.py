@@ -1,39 +1,53 @@
-import utils.in_out_csv as ioc  # Modulo per la gestione di file CSV
-import utils.download_from_url as dfu  # Modulo per scaricare file da URL
-import utils.parse_markdown_column as pmc  # Modulo per analizzare file Markdown
+import subprocess
+'''
+1. controlla che i link siano in apps.csv presente nella cartella ../in
+2. controlla che i file markdown in locale siano nella cartella ../mdfile
 
-# Percorsi dei file di input e output
-name_file_csv_in = "../analizza_readme/in/mini_apps.csv"  # Test:sostituisci con la prossima riga
-# name_file_csv_in = "./in/apps.csv"  # File CSV da cui leggere gli URL
-name_file_csv_out = "../analizza_readme/out/output_sections.csv"  # File CSV dove salvare l'output
-path_md_file = "../analizza_readme/md_file/"  # Directory per salvare i file Markdown scaricati
-name_file_json_in = "../analizza_readme/in/tipologia.json"  # File JSON per le categorie
+- rimuovi il contenuto di una cartella -> rm -rf /percorso/della/cartella/md_file/*
+- rinomina i file nella cartella per ottenere il formato numerico nn.md 
+- vai sulla cartella ->  rename 's/_readme//' (esempio: rimuove _readme dal nome del file cifra_readme.md ) 
 
-# Legge gli URL dal file CSV di input
-site_list = ioc.read_urls(name_file_csv_in)  # Funzione che legge gli URL dal CSV
-print(".. imported URLs from CSV ..")
-#print(site_list)
+- copia tutti i file in un altra cartella-> cp -r ~/percorso/origine/readmes/* ~/percorso/destinazione/md_file
+'''
 
-# Rinomina gli URL per il download
-link_list = dfu.rename_urls(site_list)  # Funzione che rinomina gli URL per il download
-print(".. renamed URLs ..")
-#dprint(link_list)
+def main():
+    while True:  # Loop per tornare al menu se l'utente sceglie "m1
+        print("\nScegli un'opzione:")
+        print("1 - Carica README da elenco CSV e processa (download.py)")
+        print("2 - Carica README da locale e processa (process.py)")
+        print("3 - Analizza (statistics.py)")
+        print("4 - Esci")
 
-# Scarica i file Markdown dagli URL rinominati
-num_file_md = dfu.download_md_file(link_list, path_md_file)  # Funzione che scarica i file Markdown
-print(f".. downloaded {num_file_md} markdown files in {path_md_file}..")
+        scelta = input("Scegli: ").strip().lower()
 
-# Carica il file JSON delle categorie
-categories = pmc.load_categories_from_json(name_file_json_in)  # Funzione per caricare le categorie dal JSON
-print(".. loaded categories from JSON ..")
+        if scelta == "1":
 
-# Crea una tabella dei dati analizzando i file Markdown scaricati
-data_table = pmc.get_data_table(num_file_md, link_list, path_md_file, categories)  # Funzione che analizza i file
-print(".. created data table from markdown files ..")
+            subprocess.run([".venv\\Scripts\\python.exe", "download.py"])
+            azione = input(
+                "\nPremi 'invio' per tornare al menu principale: ").strip().lower()
+            if azione == "":
+                continue  # Torna al menu
 
-# Esporta la tabella dei dati in un file CSV di output
-ioc.get_csv_tab(data_table, name_file_csv_out)  # Funzione per esportare i dati in un CSV
-print(f".. table exported to CSV at {name_file_csv_out} ..")
+        elif scelta == "2":
+            subprocess.run([".venv\\Scripts\\python.exe", "process.py"])
+            azione = input(
+                "\nPremi 'invio' per tornare al menu principale: ").strip().lower()
+            if azione == "":
+                continue  # Torna al menu
 
-# Segnala la fine dell'esecuzione del programma
-print("END")
+        elif scelta == "3":
+            subprocess.run([".venv\\Scripts\\python.exe", "statistics.py"])
+            azione = input(
+                "\nPremi 'invio' per tornare al menu principale: ").strip().lower()
+            if azione == "":
+                continue  # Torna al menu
+
+        elif scelta == "4":
+            print("Uscita dal programma...")
+            break  # Esce dal loop e termina il programma
+
+        else:
+            print("Scelta non valida. Riprova.")
+
+if __name__ == "__main__":
+    main()

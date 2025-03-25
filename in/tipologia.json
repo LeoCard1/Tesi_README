@@ -1,83 +1,117 @@
 {
   "prerequisites": {
     "keywords": [
-      "Prerequisites",
-      "Requirements",
-      "Dependencies",
-      "Getting Started"
+      "Requi",
+      "Dependenc",
+      "Getting Started",
+      "Quick"
     ]
   },
   "title": {
     "keywords": [
-      "Title",
+      "Content",
+      "TOC",
       "Name of Project",
-      "Index",
-      "Table of contents",
+      "Index"
+    ]
+  },
+  "description": {
+    "keywords": [
       "Overview",
       "Introduction",
       "About",
-      "Description",
       "Purpose",
       "Summary"
     ]
   },
+
   "install": {
     "keywords": [
-      "Install",
-      "Installation",
-      "Installing",
+      "Instal",
+      "Remov",
       "Build",
-      "Building",
-      "Setup",
-      "Deployment",
+      "Deploy",
       "Source",
       "Download",
       "Binary",
-      "Executable"
+      "Exe"
     ]
   },
   "configuration": {
     "keywords": [
       "Config",
-      "Settings",
-      "Options",
-      "Flags",
-      "Parameters",
-      "Environment variables",
-      "Editable values",
+      "Set",
+      "Option",
+      "Flag",
+      "Param",
+      "Environment variable",
+      "Editable value",
       "Custom",
       "Paths",
       "Storing",
-      "Proxies",
-      "Customization"
+      "Prox",
+      "Custom"
     ]
   },
   "documentation": {
     "keywords": [
-      "Docs",
+      "Troubleshoot",
+      "Manual",
+      "Tutorial",
+      "Doc",
       "Guide",
       "Manual",
       "Wiki",
+      "Usage",
       "Manpage",
       "Api",
-      "Details",
+      "Detail",
       "FAQ",
-      "Tutorial"
+      "Frequent",
+      "Ask",
+      "Question",
+      "Caveat",
+      "Issues"
     ]
   },
   "features": {
     "keywords": [
-      "Features",
-      "Functionality",
-      "Capabilities",
-      "Key Features",
-      "Building blocks",
-      "Characteristics",
-      "Attributes",
-      "Highlights",
+      "Roadmap",
+      "Feature",
+      "Example",
+      "Build",
+      "Functionalit",
+      "Capabilit",
+      "Characteristic",
+      "Attribut",
+      "Highlight",
       "Cool Stuff",
       "Syntax",
-      "Goals"
+      "Goal"
+    ]
+  },
+  "license":{
+    "keywords": [
+      "Licens",
+      "Copyright"
+    ]
+  },
+  "credits":{
+    "keywords": [
+      "credit",
+      "contribut",
+      "Ackn",
+      "Thank"
+    ]
+  },
+  "help":{
+    "keywords": [
+      "support"
+    ]
+  },
+  "performance":{
+    "keywords": [
+      "speed"
     ]
   }
 }
