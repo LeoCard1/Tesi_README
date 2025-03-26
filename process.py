@@ -26,9 +26,10 @@ def main():
 
     # Verifica se la cartella esisteù
     num_file_md=0
+
     if os.path.isdir(args.md_path):
-        #recupera la lista di file Markdown nella cartella
-        link_list = os.listdir(args.md_path)
+        # Recupera la lista di file nella cartella
+        link_list = [file for file in os.listdir(args.md_path) if file.endswith('.md') ]
         num_file_md = len(link_list)
         print(f".. Caricati {num_file_md} README dalla cartella {args.md_path} ..")
 

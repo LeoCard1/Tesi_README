@@ -27,7 +27,7 @@ def main():
     # Legge gli URL dal file CSV
     site_list = ioc.read_urls(args.csv_in)
     print(f".. URL importati dal CSV: {args.csv_in} ..")
-    print (site_list)
+    #print (site_list)
 
 
     # Converte gli URL in formato raw per il download
