@@ -2,6 +2,9 @@ md_file/*
 !md_file/.gitkeep
 out/*
 !out/.gitkeep
+urls/*
+!urls/.gitkeep
+
 
 
 __pycache__/

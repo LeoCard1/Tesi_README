@@ -111,3 +111,78 @@ def get_csv_tab2(data_table, name_file_csv_out):
                     file_data["num_links"][i],
                     file_data["current_links"][i]
                 ])
+
+
+def get_csv_tab_url(data_table, name_file_csv_out):
+    """
+    Scrive un file CSV con una riga per ogni file, contenente:
+    - Nome del file
+    - Tutti i link presenti nel file
+    - Link al repository
+
+    Parametri:
+    - data_table (list): Lista di dizionari con informazioni sui file Markdown
+    - name_file_csv_out (str): Nome del file CSV di output
+
+    Ritorna:
+    - Nessun valore di ritorno. Scrive i dati nel file CSV.
+    """
+    with open(name_file_csv_out, mode='w', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+
+        # Intestazione delle colonne nel file CSV
+        writer.writerow([
+            "File_name",  # Nome del file Markdown
+            "Current_links",  # Tutti i link presenti nel file
+            "Repository_link"  # URL del repository
+        ])
+
+        # Scrive i dati riga per riga nel file CSV
+        for file_data in data_table:
+            # Unisce tutti i link delle sezioni in una singola lista
+            all_links = []
+            for section_links in file_data["current_links"]:
+                all_links.extend(section_links)
+
+            writer.writerow([
+                file_data["file_name"],  # Nome del file
+                all_links,  # Lista completa di tutti i link
+                file_data["link"]  # URL del repository
+            ])
+
+
+def get_csv_tab_url_2(data_table, name_file_csv_out_url):
+    """
+    Scrive un file CSV con una riga per ogni file, contenente:
+    - Nome del file
+    - Tutti i link presenti nel file
+
+    Differisce da get_csv_tab_url per l'omissione del Repository_link
+
+    Parametri:
+    - data_table (list): Lista di dizionari con informazioni sui file Markdown
+    - name_file_csv_out_url (str): Nome del file CSV di output
+
+    Ritorna:
+    - Nessun valore di ritorno. Scrive i dati nel file CSV.
+    """
+    with open(name_file_csv_out_url, mode='w', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+
+        # Intestazione delle colonne nel file CSV
+        writer.writerow([
+            "File_name",  # Nome del file Markdown
+            "Current_links"  # Tutti i link presenti nel file
+        ])
+
+        # Scrive i dati riga per riga nel file CSV
+        for file_data in data_table:
+            # Unisce tutti i link delle sezioni in una singola lista
+            all_links = []
+            for section_links in file_data["current_links"]:
+                all_links.extend(section_links)
+
+            writer.writerow([
+                file_data["file_name"],  # Nome del file
+                all_links  # Lista completa di tutti i link
+            ])

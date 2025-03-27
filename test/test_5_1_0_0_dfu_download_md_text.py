@@ -6,11 +6,11 @@ from utils.parse_markdown_column import download_md_text
 class TestDownloadMdText(unittest.TestCase):
 
     def setUp(self):
-        """Configura l'ambiente di test creando una cartella con file Markdown di prova."""
+        """Configura l'ambiente di test creando una cartella con file Markdown di urls."""
         self.test_dir = "test_md_files/"  # Cartella di test con i file Markdown
         os.makedirs(self.test_dir, exist_ok=True)  # Crea la cartella se non esiste
 
-        # Crea alcuni file Markdown di prova
+        # Crea alcuni file Markdown di urls
         self.existing_file = os.path.join(self.test_dir, "example.md")
         self.corrupted_file = os.path.join(self.test_dir, "corrupted.md")
 

@@ -93,6 +93,59 @@ def categorize_title(cleaned_title, categories):
 
 
 
+
+
+
+
+
+
+
+
+# Funzione principale per ottenere la tabella dati completa
+def get_data_table(num_file_md, link_list, path_md_file, categories_json):
+    """
+    Genera la tabella dei dati estraendo informazioni dai file Markdown.
+
+    Parametri:
+    - num_file_md (int): Numero totale di file Markdown.
+    - link_list (list): Lista di URL dei repository.
+    - path_md_file (str): Percorso dei file Markdown.
+    - categories_json (dict): Dizionario contenente le categorie.
+
+    Ritorna:
+    - list: Tabella dati con titoli, categorie e lunghezza delle sezioni.
+    """
+    data_table = initialize_data_table(num_file_md, link_list)
+    return extract_sections(data_table, path_md_file, categories_json)
+
+def initialize_data_table(num_file_md, link_list):
+    """
+    Inizializza una lista di dizionari per memorizzare i dati estratti dai file Markdown.
+
+    Parametri:
+    - num_file_md (int): Numero di file Markdown da analizzare.
+    - link_list (list): Lista di URL corrispondenti ai file Markdown.
+
+    Ritorna:
+    - list: Una lista di dizionari, ognuno contenente informazioni di base sul file.
+    """
+    data_table = []
+    for i in range(num_file_md):
+        file_data = {
+            "file_name": f"{i}.md",  # Nome del file
+            "h1_titles": [],  # Lista dei titoli H1
+            "category": [],  # Categoria di ogni titolo H1
+            "char_counts": [],  # Numero di caratteri della sezione sotto il titolo H1
+            "num_links": [],  # Nuova colonna per il numero di link
+            "current_links": [],
+            "num_images": [],
+            "num_videos": [],  # Aggiunto per contare i video
+            "num_code_blocks": [],  # Aggiunto per contare i blocchi di codice
+            "link": link_list[i]  # URL del repository
+        }
+        data_table.append(file_data)
+    return data_table
+
 def extract_sections(data_table, path_md_file, categories):
     """
     Estrae i titoli H1, la categoria, la lunghezza delle sezioni,
@@ -123,56 +176,6 @@ def extract_sections(data_table, path_md_file, categories):
             file_data["num_videos"].append(videos[i])  # Aggiunge il conteggio dei video
             file_data["num_code_blocks"].append(code_blocks[i])  # Aggiunge il conteggio dei blocchi di codice
 
-    return data_table
-
-
-
-
-
-
-
-# Funzione principale per ottenere la tabella dati completa
-def get_data_table(num_file_md, link_list, path_md_file, categories_json):
-    """
-    Genera la tabella dei dati estraendo informazioni dai file Markdown.
-
-    Parametri:
-    - num_file_md (int): Numero totale di file Markdown.
-    - link_list (list): Lista di URL dei repository.
-    - path_md_file (str): Percorso dei file Markdown.
-    - categories_json (dict): Dizionario contenente le categorie.
-
-    Ritorna:
-    - list: Tabella dati con titoli, categorie e lunghezza delle sezioni.
-    """
-    data_table = initialize_data_table(num_file_md, link_list)
-    return extract_sections(data_table, path_md_file, categories_json)
-def initialize_data_table(num_file_md, link_list):
-    """
-    Inizializza una lista di dizionari per memorizzare i dati estratti dai file Markdown.
-
-    Parametri:
-    - num_file_md (int): Numero di file Markdown da analizzare.
-    - link_list (list): Lista di URL corrispondenti ai file Markdown.
-
-    Ritorna:
-    - list: Una lista di dizionari, ognuno contenente informazioni di base sul file.
-    """
-    data_table = []
-    for i in range(num_file_md):
-        file_data = {
-            "file_name": f"{i}.md",  # Nome del file
-            "h1_titles": [],  # Lista dei titoli H1
-            "category": [],  # Categoria di ogni titolo H1
-            "char_counts": [],  # Numero di caratteri della sezione sotto il titolo H1
-            "num_links": [],  # Nuova colonna per il numero di link
-            "current_links": [],
-            "num_images": [],
-            "num_videos": [],  # Aggiunto per contare i video
-            "num_code_blocks": [],  # Aggiunto per contare i blocchi di codice
-            "link": link_list[i]  # URL del repository
-        }
-        data_table.append(file_data)
     return data_table
 
 
@@ -219,6 +222,62 @@ def get_data_table2(num_file_md, path_md_file, categories_json):
     """
     data_table = initialize_data_table2(num_file_md)
     return extract_sections(data_table, path_md_file, categories_json)
+
+
+def initialize_data_table_url(num_file_md, link_list):
+    """
+    """
+    data_table = []
+    for i in range(num_file_md):
+        file_data = {
+            "file_name": f"{i}.md",  # Nome del file
+            "current_links": [],
+            "link": link_list[i]  # URL del repository
+        }
+        data_table.append(file_data)
+    return data_table
+
+
+def extract_sections_url(data_table, path_md_file, categories):
+    """
+    """
+    for file_data in data_table:
+        md_text = download_md_text(path_md_file + file_data["file_name"])
+        h1_titles, images, nlinks, cur_links, videos, code_blocks = find_titles_md(md_text, categories)
+
+        for i, (title, _, _) in enumerate(h1_titles):
+            file_data["current_links"].append(cur_links)
+
+    return data_table
+
+
+def get_data_table_url(num_file_md, link_list, path_md_file, categories_json):
+    """
+
+    """
+    data_table = initialize_data_table_url(num_file_md, link_list)
+    return extract_sections_url(data_table, path_md_file, categories_json)
+
+
+def initialize_data_table_url_2(num_file_md):
+    """
+    """
+    data_table = []
+    for i in range(num_file_md):
+        file_data = {
+            "file_name": f"{i}.md",  # Nome del file
+            "current_links": [],
+        }
+        data_table.append(file_data)
+    return data_table
+
+
+def get_data_table_url_2(num_file_md, path_md_file, categories_json):
+    """
+
+    """
+    data_table = initialize_data_table_url_2(num_file_md)
+    return extract_sections_url(data_table, path_md_file, categories_json)
 
 
 def calculate_section_length(md_text, h_title, next_h_title):

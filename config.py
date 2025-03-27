@@ -3,12 +3,12 @@ import sys
 
 # Percorsi dei file di input e output
 NAME_FILE_CSV_IN = "./in/mini_apps.csv"
-NAME_FILE_CSV_OUT = "./out/output_sections.csv"
+NAME_FILE_CSV_OUT = "./out/output_section.csv"
 PATH_MD_FILE = "./md_file/"
 NAME_FILE_JSON_IN = "./in/tipologia.json"
 OUT_DIR = "./out/"
 IN_DIR= "./in/"
-CUR_URL_DIR= "./current_urls/"
+NAME_FILE_CSV_OUT_URL= "urls/output_urls.csv"
 
 # Funzione per controllare se un file esiste e non è vuoto
 def check_file(file_path, file_description):
@@ -32,7 +32,7 @@ check_file(NAME_FILE_JSON_IN, "JSON di input")
 check_directory(PATH_MD_FILE, "per i file Markdown")
 check_directory(OUT_DIR, "di output")  # Controllo della cartella out
 check_directory(IN_DIR, "di input")  # Controllo della cartella in
-check_directory(CUR_URL_DIR, "urls nelle sezioni del reame")  # Controllo della cartella degli urls nei READMEs
+#check_directory(NAME_FILE_CSV_OUT_URL, "urls nelle sezioni del reame")  # Controllo della cartella degli urls nei READMEs
 
 # Se tutto è OK, procedi con l'esecuzione del programma
 print("Tutti i file e le cartelle necessari esistono e sono validi.")
