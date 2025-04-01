@@ -1,7 +1,5 @@
 import csv
 
-
-
 def read_urls(path):
     """
     Legge un file CSV e restituisce una lista di URL validi.
@@ -113,12 +111,17 @@ def get_csv_tab2(data_table, name_file_csv_out):
                 ])
 
 
+import csv
+
+
 def get_csv_tab_url(data_table, name_file_csv_out):
     """
-    Scrive un file CSV con una riga per ogni file, contenente:
+    Scrive un file CSV con una riga per ogni link, contenente:
     - Nome del file
-    - Tutti i link presenti nel file
-    - Link al repository
+    - Categoria del link
+    - Numero del link nella categoria
+    - URL del link
+    - URL del repository
 
     Parametri:
     - data_table (list): Lista di dizionari con informazioni sui file Markdown
@@ -131,58 +134,57 @@ def get_csv_tab_url(data_table, name_file_csv_out):
         writer = csv.writer(file)
 
         # Intestazione delle colonne nel file CSV
-        writer.writerow([
-            "File_name",  # Nome del file Markdown
-            "Current_links",  # Tutti i link presenti nel file
-            "Repository_link"  # URL del repository
-        ])
+        writer.writerow(["File_name", "Category", "Number", "Link", "Repository"])
 
         # Scrive i dati riga per riga nel file CSV
         for file_data in data_table:
-            # Unisce tutti i link delle sezioni in una singola lista
-            all_links = []
-            for section_links in file_data["current_links"]:
-                all_links.extend(section_links)
+            file_name = file_data["file_name"]
+            repository_link = file_data["link"]
 
-            writer.writerow([
-                file_data["file_name"],  # Nome del file
-                all_links,  # Lista completa di tutti i link
-                file_data["link"]  # URL del repository
-            ])
+            # Appiattisce la lista di link
+            all_links = [item for section_links in file_data["current_links"] for item in section_links]
 
-
-def get_csv_tab_url_2(data_table, name_file_csv_out_url):
+            for category, number, link in all_links:
+                writer.writerow([
+                    file_name,
+                    category if category else "None",  # Gestisce le categorie None
+                    number,
+                    link,
+                    repository_link
+                ])
+def get_csv_tab_url_2(data_table, name_file_csv_out):
     """
-    Scrive un file CSV con una riga per ogni file, contenente:
+    Scrive un file CSV con una riga per ogni link, contenente:
     - Nome del file
-    - Tutti i link presenti nel file
-
-    Differisce da get_csv_tab_url per l'omissione del Repository_link
+    - Categoria del link
+    - Numero del link nella categoria
+    - URL del link
 
     Parametri:
     - data_table (list): Lista di dizionari con informazioni sui file Markdown
-    - name_file_csv_out_url (str): Nome del file CSV di output
+    - name_file_csv_out (str): Nome del file CSV di output
 
     Ritorna:
     - Nessun valore di ritorno. Scrive i dati nel file CSV.
     """
-    with open(name_file_csv_out_url, mode='w', newline='', encoding='utf-8') as file:
+    with open(name_file_csv_out, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
 
         # Intestazione delle colonne nel file CSV
-        writer.writerow([
-            "File_name",  # Nome del file Markdown
-            "Current_links"  # Tutti i link presenti nel file
-        ])
+        writer.writerow(["File_name", "Category", "Number", "Link"])
 
         # Scrive i dati riga per riga nel file CSV
         for file_data in data_table:
-            # Unisce tutti i link delle sezioni in una singola lista
-            all_links = []
-            for section_links in file_data["current_links"]:
-                all_links.extend(section_links)
+            file_name = file_data["file_name"]
 
-            writer.writerow([
-                file_data["file_name"],  # Nome del file
-                all_links  # Lista completa di tutti i link
-            ])
+            # Appiattisce la lista annidata
+            all_links = [item for sublist in file_data["current_links"] for item in sublist]
+
+            for category, number, link in all_links:
+                writer.writerow([
+                    file_name,
+                    category if category else "None",  # Gestisce le categorie None
+                    number,
+                    link
+                ])
+

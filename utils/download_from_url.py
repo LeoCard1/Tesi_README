@@ -1,5 +1,9 @@
 import os
+import re
 import urllib.request
+from urllib.parse import urlparse
+
+import requests
 
 
 # Funzione per convertire gli URL originali nei corrispondenti URL raw di GitHubusercontent
@@ -19,7 +23,7 @@ def rename_urls(site_list):
         a = s.split('.com')[0] + 'usercontent.com'
         b = s.split('.com')[1]
         # Costruisce l'URL che punta al file README.md nella directory principale del repo
-        c = 'http://raw.' + a.split('//')[1] + b + '/master/README.md'
+        c = 'http://raw.' + a.split('//')[1] + b + '/master/README.md' #github reindirizza automaticamente anche al default branch = "main"
         s_raw.append(c)
     return s_raw
 
@@ -61,3 +65,4 @@ def download_md_file(link_list, path_md_file):
         except:
             pass  # Ignora eventuali errori durante il download e continua con il prossimo link
     return i
+

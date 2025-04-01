@@ -1,11 +1,7 @@
 import re
 import json
-import urllib
-
-
 from markdown_it import MarkdownIt
 
-import config
 
 
 # Funzione per scaricare i file Markdown da una lista di link e salvarli localmente
@@ -246,7 +242,7 @@ def extract_sections_url(data_table, path_md_file, categories):
         h1_titles, images, nlinks, cur_links, videos, code_blocks = find_titles_md(md_text, categories)
 
         for i, (title, _, _) in enumerate(h1_titles):
-            file_data["current_links"].append(cur_links)
+            file_data["current_links"]=cur_links
 
     return data_table
 
@@ -362,6 +358,7 @@ def find_titles_md(md_text, categories):
     link_active = False  # Flag per sapere se siamo dentro un link
     link_text = ""  # Testo del link attuale
     link_url = ""  # URL del link attuale
+    cat=""
 
     for i, token in enumerate(tokens):
         if token.type == 'heading_open' and token.tag == 'h1':
@@ -377,6 +374,7 @@ def find_titles_md(md_text, categories):
             category = categorize_title(cleaned_title, categories)
 
             h1_titles.append((title_content, 1, category))
+            cat=category
 
             # Resetta i contatori per la nuova sezione
             countim = 0
@@ -407,9 +405,7 @@ def find_titles_md(md_text, categories):
                 elif child.type == 'link_close':
                     if link_active and link_text.strip():
                         countlink += 1
-                        current_links.append((countlink, link_url))  # Salva la coppia (num_url, url)
-
-                # Aggiungi il controllo per i video (link a YouTube, Vimeo, ecc.)
+                        current_links.append((cat,countlink, link_url))  # Salva la tupla                # Aggiungi il controllo per i video (link a YouTube, Vimeo, ecc.)
                 elif child.type == 'link_open' and 'href' in child.attrs:
                     video_url = child.attrs['href']
                     if 'youtube.com' in video_url or 'vimeo.com' in video_url:
