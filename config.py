@@ -9,6 +9,8 @@ NAME_FILE_JSON_IN = "./in/tipologia.json"
 OUT_DIR = "./out/"
 IN_DIR= "./in/"
 NAME_FILE_CSV_OUT_URL= "urls/output_urls.csv"
+GRAPH_OUT_DIR= "graphs/"
+TABLES_OUT_DIR= "tables/"
 
 # Funzione per controllare se un file esiste e non è vuoto
 def check_file(file_path, file_description):
@@ -33,6 +35,7 @@ check_directory(PATH_MD_FILE, "per i file Markdown")
 check_directory(OUT_DIR, "di output")  # Controllo della cartella out
 check_directory(IN_DIR, "di input")  # Controllo della cartella in
 #check_directory(NAME_FILE_CSV_OUT_URL, "urls nelle sezioni del reame")  # Controllo della cartella degli urls nei READMEs
+check_directory(TABLES_OUT_DIR, "delle tabelle di analisi")  # Controllo della cartella con le analisi tables
 
 # Se tutto è OK, procedi con l'esecuzione del programma
 print("Tutti i file e le cartelle necessari esistono e sono validi.")

@@ -4,6 +4,10 @@ out/*
 !out/.gitkeep
 urls/*
 !urls/.gitkeep
+graphs/*
+!graphs/.gitkeep
+tables/*
+!tables/.gitkeep
 
 
 

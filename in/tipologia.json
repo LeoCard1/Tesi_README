@@ -1,42 +1,4 @@
 {
-  "prerequisites": {
-    "keywords": [
-      "Requi",
-      "Dependenc",
-      "Getting Started",
-      "Quick"
-    ]
-  },
-  "title": {
-    "keywords": [
-      "Content",
-      "TOC",
-      "Name of Project",
-      "Index"
-    ]
-  },
-  "description": {
-    "keywords": [
-      "Overview",
-      "Introduction",
-      "About",
-      "Purpose",
-      "Summary"
-    ]
-  },
-
-  "install": {
-    "keywords": [
-      "Instal",
-      "Remov",
-      "Build",
-      "Deploy",
-      "Source",
-      "Download",
-      "Binary",
-      "Exe"
-    ]
-  },
   "configuration": {
     "keywords": [
       "Config",
@@ -50,7 +12,33 @@
       "Paths",
       "Storing",
       "Prox",
-      "Custom"
+      "Custom",
+      "Release Note",
+      "Change"
+    ]
+  },
+  "contacts": {
+    "keywords": [
+      "contact"
+    ]
+  },
+  "credits": {
+    "keywords": [
+      "credit",
+      "contribut",
+      "ackn",
+      "Author",
+      "Thank"
+    ]
+  },
+  "description": {
+    "keywords": [
+      "Overview",
+      "Description",
+      "Introduction",
+      "About",
+      "Purpose",
+      "Summary"
     ]
   },
   "documentation": {
@@ -71,7 +59,23 @@
       "Ask",
       "Question",
       "Caveat",
-      "Issues"
+      "Issues",
+      "Data Format",
+      "Backends",
+      "Design Principles",
+      "How it work",
+      "How to use",
+      "Screenshots",
+      "Demo",
+      "Remark",
+      "Available functions",
+      "List of command",
+      "Suggest operation",
+      "Recipes",
+      "Why",
+      "Tips",
+      "Limitation",
+      "Notes"
     ]
   },
   "features": {
@@ -87,31 +91,73 @@
       "Highlight",
       "Cool Stuff",
       "Syntax",
+      "Key spec",
       "Goal"
     ]
   },
-  "license":{
+  "feedback": {
     "keywords": [
-      "Licens",
-      "Copyright"
+      "You can"
     ]
   },
-  "credits":{
-    "keywords": [
-      "credit",
-      "contribut",
-      "Ackn",
-      "Thank"
-    ]
-  },
-  "help":{
+  "help": {
     "keywords": [
       "support"
     ]
   },
-  "performance":{
+  "install": {
     "keywords": [
-      "speed"
+      "Instal",
+      "Remov",
+      "Build",
+      "Deploy",
+      "Source",
+      "Download",
+      "Binary",
+      "packag",
+      "Exe"
+    ]
+  },
+  "license": {
+    "keywords": [
+      "Licens",
+      "Copyright",
+      "Copying"
+    ]
+  },
+  "performance": {
+    "keywords": [
+      "Speed",
+      "Benchmark",
+      "Security"
+    ]
+  },
+  "prerequisites": {
+    "keywords": [
+      "Requi",
+      "Dependenc",
+      "Getting Started",
+      "Quick"
+    ]
+  },
+  "testing": {
+    "keywords": [
+      "Test"
+    ]
+  },
+  "title": {
+    "keywords": [
+      "Content",
+      "TOC",
+      "Name of Project",
+      "Index"
+    ]
+  },
+  "todo": {
+    "keywords": [
+      "How To do",
+      "Miss",
+      "status"
     ]
   }
 }

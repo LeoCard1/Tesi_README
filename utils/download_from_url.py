@@ -1,9 +1,10 @@
-import os
-import re
-import urllib.request
-from urllib.parse import urlparse
+import os  # Per operazioni sul filesystem (cartelle, file)
+import re  # Per espressioni regolari (non usato in questo snippet ma incluso)
+import urllib.request  # Per scaricare contenuti via HTTP
+from urllib.parse import urlparse  # Per analizzare URL (non usato direttamente qui)
 
-import requests
+import \
+    requests  # Per effettuare richieste HTTP (non usato in queste funzioni ma probabilmente utile in altre parti del progetto)
 
 
 # Funzione per convertire gli URL originali nei corrispondenti URL raw di GitHubusercontent
@@ -17,36 +18,49 @@ def rename_urls(site_list):
     Ritorna:
     - s_raw (list): Lista di URL modificati che puntano al file README.md in formato raw.
     """
-    s_raw = []
+    s_raw = []  # Lista degli URL raw da restituire
     for id, s in enumerate(site_list):
-        # Sostituisce '.com' con 'usercontent.com' per ottenere l'URL raw
-        a = s.split('.com')[0] + 'usercontent.com'
-        b = s.split('.com')[1]
-        # Costruisce l'URL che punta al file README.md nella directory principale del repo
-        c = 'http://raw.' + a.split('//')[1] + b + '/master/README.md' #github reindirizza automaticamente anche al default branch = "main"
+        # Divide l'URL al punto '.com' per ricostruire l'indirizzo raw
+        a = s.split('.com')[0] + 'usercontent.com'  # Parte base dell'URL raw
+        b = s.split('.com')[1]  # Resto dell'URL dopo '.com'
+
+        # Costruisce l'URL raw che punta al file README.md sul branch master (o main)
+        c = 'http://raw.' + a.split('//')[1] + b + '/master/README.md'
+
+        # Aggiunge l'URL finale alla lista
         s_raw.append(c)
     return s_raw
 
+
 def pulisci_cartella(cartella):
-    """Elimina solo i file .md presenti nella cartella, senza rimuovere la cartella stessa."""
+    """
+    Elimina solo i file con estensione .md presenti nella cartella,
+    senza rimuovere la cartella stessa.
+
+    Parametri:
+    - cartella (str): Il percorso della cartella da "ripulire".
+
+    Ritorna:
+    - None
+    """
     if os.path.exists(cartella):
         for file in os.listdir(cartella):
             file_path = os.path.join(cartella, file)
             try:
+                # Se è un file Markdown (.md), lo elimina
                 if os.path.isfile(file_path) and file.endswith(".md"):
                     os.remove(file_path)
             except Exception as e:
                 print(f"Errore nell'eliminazione di {file}: {e}")
     else:
-        os.makedirs(cartella)  # Se la cartella non esiste, la crea
+        # Se la cartella non esiste, la crea
+        os.makedirs(cartella)
 
 
-
-
-# Funzione per leggere il contenuto di un file Markdown
+# Funzione per scaricare i file Markdown da una lista di URL
 def download_md_file(link_list, path_md_file):
     """
-    Questa funzione scarica i file README.md dai link forniti e li salva localmente.
+    Scarica i file README.md dai link forniti e li salva localmente con nomi numerici.
 
     Parametri:
     - link_list (list): Lista di URL dei file Markdown da scaricare.
@@ -55,14 +69,16 @@ def download_md_file(link_list, path_md_file):
     Ritorna:
     - i (int): Numero di file scaricati con successo.
     """
-    pulisci_cartella(path_md_file)
+    pulisci_cartella(path_md_file)  # Pulisce la cartella prima di iniziare
+
     i = 0  # Contatore per i file scaricati
+
     for link in link_list:
         try:
-            # Scarica il file e lo salva con un indice numerico
+            # Scarica il file e lo salva come 0.md, 1.md, 2.md, ecc.
             urllib.request.urlretrieve(link, path_md_file + str(i) + ".md")
-            i += 1
+            i += 1  # Incrementa il contatore se il download va a buon fine
         except:
-            pass  # Ignora eventuali errori durante il download e continua con il prossimo link
+            # Ignora errori (ad esempio se un URL è non valido o non raggiungibile)
+            pass
     return i
-

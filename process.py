@@ -7,6 +7,7 @@ python process.py python3 process.py --md_path "~/leonardo/Scr*/readmes/" --json
 import argparse
 import os
 import re
+
 import utils.in_out_csv as ioc
 import utils.parse_markdown_column as pmc
 import config
@@ -55,7 +56,7 @@ def main():
 
     # Recupera la lista di file nella cartella
     num_file_md = len([file for file in os.listdir(args.md_path) if file.endswith('.md')])
-    print(f".. Presenti {num_file_md} README dalla cartella {args.md_path} ..")
+    print(f".. Presenti {num_file_md} README file dalla cartella {args.md_path} ..")
 
     # Analizza i file Markdown e crea una tabella
     data_table = pmc.get_data_table2(num_file_md, config.PATH_MD_FILE, categories)
