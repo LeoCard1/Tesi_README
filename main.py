@@ -17,8 +17,8 @@ def main():
         print("\nScegli un'opzione:")
         print("1 - Carica i link da in/*.csv e analizza i READMEs (download.py)")
         print("2 - Carica READMEs da /md_files/*.md e analizza (process.py)")
-        print("3 - Stampa grafici nella cartella /graphs (data_analysis_graph.py)")
-        print("4 - Stampa sommario su CSV nella cartella /tables (generate_summary_csv.py)")
+        print("3 - Stampa sommario su CSV nella cartella /tables (generate_summary_csv.py)")
+        print("4 - Stampa grafici nella cartella /graphs (data_analysis_graph.py)")
         print("5 - Esci")
 
         scelta = input("Scegli: ").strip().lower()
@@ -30,10 +30,10 @@ def main():
             subprocess.run([".venv\\Scripts\\python.exe", "process.py"])
             input("\nPremi 'invio' per tornare al menu principale: ")
         elif scelta == "3":
-            subprocess.run([".venv\\Scripts\\python.exe", "data_analysis_graph.py"])
+            subprocess.run([".venv\\Scripts\\python.exe", "generate_summary_csv.py"])
             input("\nPremi 'invio' per tornare al menu principale: ")
         elif scelta == "4":
-            subprocess.run([".venv\\Scripts\\python.exe", "generate_summary_csv.py"])
+            subprocess.run([".venv\\Scripts\\python.exe", "data_analysis_graph.py"])
             input("\nPremi 'invio' per tornare al menu principale: ")
         elif scelta == "5":
             print("Uscita dal programma...")

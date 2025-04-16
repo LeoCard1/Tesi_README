@@ -11,6 +11,7 @@ IN_DIR= "./in/"
 NAME_FILE_CSV_OUT_URL= "urls/output_urls.csv"
 GRAPH_OUT_DIR= "graphs/"
 TABLES_OUT_DIR= "tables/"
+TABLES_FILE_SUMMARY= "tables/readme_summary.csv"
 
 # Funzione per controllare se un file esiste e non è vuoto
 def check_file(file_path, file_description):

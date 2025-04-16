@@ -1,153 +1,160 @@
-import os  # Modulo per operazioni su file e percorsi
-import pandas as pd  # Libreria per la manipolazione dei dati (DataFrame)
-import matplotlib.pyplot as plt  # Libreria per la generazione di grafici
-import seaborn as sns  # Libreria di visualizzazione dati, integrata con matplotlib
-import json  # Per leggere/scrivere file JSON
-import config  # Modulo di configurazione con percorsi e costanti
+import os
+import json
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import config
+
+# ========== Utility Functions ==========
+
+def carica_json(file_path):
+    with open(file_path, 'r', encoding='utf-8') as file:
+        return json.load(file)
 
 
-def load_categories_from_json(json_file):
-    """
-    Carica un dizionario di categorie da un file JSON.
-
-    Parametri:
-    - json_file (str): Percorso del file JSON.
-
-    Ritorna:
-    - dict: Dizionario delle categorie.
-    """
-    with open(json_file, 'r', encoding='utf-8') as f:
-        return json.load(f)
+def salva_fig(percorso):
+    if percorso:
+        plt.savefig(percorso)
+    plt.show()
+    plt.close()
 
 
-def count_categories(df, categories):
-    """
-    Conta quante volte ciascuna categoria compare nel DataFrame.
-
-    Parametri:
-    - df (DataFrame): Il DataFrame che contiene la colonna 'Category'.
-    - categories (dict): Dizionario di categorie da considerare.
-
-    Ritorna:
-    - dict: Conteggio delle categorie presenti nel DataFrame.
-    """
-    category_count = {category: 0 for category in categories.keys()}
-    for category in df['Category']:
-        if category in category_count:
-            category_count[category] += 1
-    return category_count
+def carica_dataframe(csv_path):
+    df = pd.read_csv(csv_path)
+    return df
 
 
-def plot_category_counts(data, save_path=None):
-    """
-    Crea un grafico a barre per visualizzare la quantità di occorrenze per ciascuna categoria.
+def normalizza_colonna(df, colonna, riempimento=''):
+    df[colonna] = df[colonna].fillna(riempimento)
+    return df
 
-    Parametri:
-    - data (dict): Dizionario con categorie e relativo conteggio.
-    - save_path (str, opzionale): Percorso dove salvare il grafico. Se None, non lo salva.
 
-    Ritorna:
-    - None
-    """
-    categories = list(data.keys())
-    counts = list(data.values())
+# ========== Analisi Categorie ==========
 
+def conta_categorie(df, categorie):
+    return df['Category'].value_counts().reindex(categorie.keys(), fill_value=0).to_dict()
+
+
+def grafico_occorrenze_categorie(conteggio, save_path=None):
+    dati_ordinati = dict(sorted(conteggio.items(), key=lambda x: x[1], reverse=True))
     plt.figure(figsize=(12, 6))
-    sns.barplot(x=categories, y=counts, palette='coolwarm')  # Crea grafico a barre
+    sns.barplot(x=list(dati_ordinati.keys()), y=list(dati_ordinati.values()), palette='coolwarm')
     plt.xticks(rotation=45)
     plt.xlabel('Categorie')
     plt.ylabel('Numero di Occorrenze')
     plt.title('Occorrenze delle Categorie Riconosciute')
     plt.tight_layout()
-
-    if save_path:
-        plt.savefig(save_path)  # Salva il grafico se specificato
-
-    plt.show()  # Mostra il grafico
-    plt.close()  # Chiude per evitare problemi con grafici successivi
+    salva_fig(save_path)
 
 
-def plot_readme_by_category_count(df, save_path=None):
-    """
-    Crea un grafico che mostra quanti README hanno 0, 1, 2, ... categorie assegnate.
-
-    Parametri:
-    - df (DataFrame): Il DataFrame con le informazioni dei README.
-    - save_path (str, opzionale): Percorso dove salvare il grafico.
-
-    Ritorna:
-    - None
-    """
-    df['Category'] = df['Category'].fillna('')  # Rimpiazza NaN con stringa vuota
-
-    # Ottiene tutte le categorie uniche (escludendo vuote)
-    category_columns = list(df['Category'].unique())
-    category_columns = [cat for cat in category_columns if cat.strip() != '']
-
-    # Crea una matrice che associa ogni file alle categorie (1 se presente)
-    category_matrix = pd.DataFrame(0, index=df['File_name'].unique(), columns=category_columns)
+def grafico_categorie_per_readme(df, save_path=None):
+    df = normalizza_colonna(df, 'Category')
+    matrice = pd.DataFrame(0, index=df['File_name'].unique(), columns=[])
 
     for _, row in df.iterrows():
-        categories = row['Category'].split(',')  # Alcuni README possono avere più categorie separate da virgole
-        for cat in categories:
-            if cat.strip():
-                category_matrix.loc[row['File_name'], cat.strip()] = 1
+        for cat in map(str.strip, row['Category'].split(',')):
+            if cat:
+                if cat not in matrice.columns:
+                    matrice[cat] = 0
+                matrice.at[row['File_name'], cat] = 1
 
-    # Somma quante categorie ha ciascun file
-    category_counts = category_matrix.sum(axis=1)
+    conteggi = matrice.sum(axis=1)
+    distribuzione = conteggi.value_counts().sort_index()
 
-    # Range completo da 0 al massimo di categorie riconosciute in un file
-    max_categories = category_counts.max()
-    full_range = range(0, max_categories + 1)
-
-    # Calcola la distribuzione (quanti README hanno 0, 1, 2, ecc. categorie)
-    distribution = category_counts.value_counts().reindex(full_range, fill_value=0).sort_index()
-
-    # Plot del grafico
     plt.figure(figsize=(10, 6))
-    sns.barplot(x=distribution.index, y=distribution.values, palette='crest')
-    plt.xlabel('Numero di Categorie Riconosciute nel README')
+    sns.barplot(x=distribuzione.index, y=distribuzione.values, palette='crest')
+    plt.xlabel('Numero di Categorie nel README')
     plt.ylabel('Numero di README')
-    plt.title('Distribuzione delle Categorie Riconosciute nei README')
+    plt.title('Distribuzione delle Categorie nei README')
     plt.tight_layout()
+    salva_fig(save_path)
 
-    if save_path:
-        plt.savefig(save_path)  # Salva se specificato
 
-    plt.show()
-    plt.close()
+# ========== Analisi Lunghezza README ==========
 
+def grafico_lunghezza_readme(percorso_csv, save_path=None):
+    df = carica_dataframe(percorso_csv)
+    df['Char_counts'] = pd.to_numeric(df['Char_counts'], errors='coerce').dropna()
+
+    plt.figure(figsize=(10, 6))
+    sns.histplot(data=df, x='Char_counts', bins=20, kde=True, color='skyblue')
+    plt.xscale('log')
+    plt.xlabel('Numero di Caratteri nel README')
+    plt.ylabel('Numero di File')
+    plt.title('Distribuzione della Lunghezza dei README')
+    plt.tight_layout()
+    salva_fig(save_path)
+
+
+def grafico_lunghezza_readme_fasce(percorso_csv, save_path=None):
+    df = carica_dataframe(percorso_csv)
+    df['Char_counts'] = pd.to_numeric(df['Char_counts'], errors='coerce').dropna()
+
+    bins = [0, 1000, 5000, 10000, 20000, float('inf')]
+    labels = ['Molto Corto (0-1k)', 'Corto (1k-5k)', 'Medio (5k-10k)', 'Lungo (10k-20k)', 'Molto Lungo (>20k)']
+    df['Fascia Lunghezza'] = pd.cut(df['Char_counts'], bins=bins, labels=labels)
+
+    distribuzione = df['Fascia Lunghezza'].value_counts().reindex(labels, fill_value=0)
+
+    plt.figure(figsize=(10, 6))
+    sns.barplot(x=distribuzione.index, y=distribuzione.values, palette='crest')
+    plt.xlabel('Fascia di Lunghezza dei README')
+    plt.ylabel('Numero di README')
+    plt.title('Distribuzione della Lunghezza dei README per Fasce')
+    plt.tight_layout()
+    salva_fig(save_path)
+
+
+# ========== Analisi Rilevanza ==========
+
+def aggiungi_rilevanza(percorso_csv, percorso_output=None):
+    df = carica_dataframe(percorso_csv)
+
+    pesi = {
+        'Alta': {'description': 1.0, 'install': 1.0, 'prerequisites': 1.0, 'documentation': 1.0},
+        'Media': {'configuration': 0.3, 'features': 0.3, 'testing': 0.3, 'performance': 0.3, 'title': 0.3},
+        'Bassa': {'credits': 0.1, 'license': 0.1, 'contacts': 0.1, 'help': 0.1, 'feedback': 0.1, 'todo': 0.1}
+    }
+
+    df['Relevance_score'] = 0.0
+    for categoria in pesi.values():
+        for col, peso in categoria.items():
+            if col in df.columns:
+                df['Relevance_score'] += df[col] * peso
+            else:
+                print(f"Attenzione: Campo mancante nel CSV: '{col}'")
+
+    output_path = percorso_output if percorso_output else percorso_csv
+    df.to_csv(output_path, index=False)
+    print(f"✅ File salvato con rilevanza: {output_path}")
+
+
+# ========== Main Execution ==========
 
 def main():
-    """
-    Funzione principale: carica i dati, conta le categorie e genera i grafici.
-    """
-    # Carica il DataFrame principale dal CSV
-    df_main = pd.read_csv(config.NAME_FILE_CSV_OUT)
+    df = carica_dataframe(config.NAME_FILE_CSV_OUT)
+    df.fillna("Unknown", inplace=True)
 
-    # Carica il file JSON con le definizioni delle categorie
-    json_file_path = os.path.join('in', 'tipologia.json')
-    categories = load_categories_from_json(json_file_path)
+    categorie = carica_json(os.path.join('in', 'tipologia.json'))
+    conteggi = conta_categorie(df, categorie)
 
-    # Rimpiazza eventuali valori mancanti nella colonna Category con "Unknown"
-    df_main.fillna("Unknown", inplace=True)
+    grafico_occorrenze_categorie(conteggi, config.GRAPH_OUT_DIR + 'grafico1_occorrenze_categorie.pdf')
+    grafico_categorie_per_readme(df, config.GRAPH_OUT_DIR + 'grafico2_distribuzione_categorie_readme.pdf')
 
-    # Conta le occorrenze delle categorie
-    category_counts = count_categories(df_main, categories)
-
-    # Crea e salva il primo grafico: quante volte appare ogni categoria
-    plot_category_counts(
-        category_counts,
-        save_path=config.GRAPH_OUT_DIR + 'grafico1_occorrenze_categorie.pdf'
+    grafico_lunghezza_readme(
+        config.TABLES_FILE_SUMMARY,
+        config.GRAPH_OUT_DIR + 'grafico3_lunghezza_readme.pdf'
+    )
+    grafico_lunghezza_readme_fasce(
+        config.TABLES_FILE_SUMMARY,
+        config.GRAPH_OUT_DIR + 'grafico4_distribuzione_lunghezza_readme_per_fasce.pdf'
     )
 
-    # Crea e salva il secondo grafico: distribuzione dei README per numero di categorie
-    plot_readme_by_category_count(
-        df_main,
-        save_path=config.GRAPH_OUT_DIR + 'grafico2_distribuzione_categorie_readme.pdf'
+    aggiungi_rilevanza(
+        config.TABLES_FILE_SUMMARY,
+        config.TABLES_OUT_DIR + 'readme_summary_relevance_score.csv'
     )
 
 
-# Esegue lo script solo se lanciato direttamente (non se importato)
 if __name__ == "__main__":
     main()

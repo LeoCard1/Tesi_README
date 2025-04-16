@@ -88,8 +88,7 @@ def generate_summary(input_csv_path, output_csv_path):
 
             # Inserisce '1' ripetuto per quante volte è presente una categoria (es. '1', '11', '111', ecc.)
             for cat in category_list:
-                count = data["categories"].get(cat, 0)
-                row[cat] = '1' * count if count > 0 else ""
+                row[cat] = data["categories"].get(cat, 0)
 
             writer.writerow(row)  # Scrive la riga nel CSV
 
